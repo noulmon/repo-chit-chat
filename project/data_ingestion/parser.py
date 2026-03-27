@@ -1,7 +1,10 @@
 import io
+import logging
 import zipfile
 
 import frontmatter
+
+logger = logging.getLogger(__name__)
 
 
 def parse_repo_zip(zip_bytes: bytes) -> list:
@@ -23,7 +26,7 @@ def parse_repo_zip(zip_bytes: bytes) -> list:
                     data["filename"] = filename
                     repository_data.append(data)
             except Exception as e:
-                print(f"Error processing {filename}: {e}")
+                logger.error(f"Error processing {filename}: {e}", exc_info=True)
                 continue
 
     return repository_data

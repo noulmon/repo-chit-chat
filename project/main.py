@@ -1,5 +1,10 @@
+import logging
+
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 from data_ingestion.chunker import DataChunker
 from data_ingestion.pipeline import run_pipeline
@@ -26,4 +31,4 @@ if __name__ == "__main__":
     search_engine = SearchEngine(embedding_model, sliding_window_chunks, embeddings)
     query = "what is Evidently?"
     results = search_engine.hybrid_search(query)
-    print(results)
+    logger.info(f"Search results: {results}")
