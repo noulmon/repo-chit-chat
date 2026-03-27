@@ -7,7 +7,7 @@ import frontmatter
 logger = logging.getLogger(__name__)
 
 
-def parse_repo_zip(zip_bytes: bytes) -> list:
+def parse_repo_zip(zip_bytes: bytes) -> list[dict]:
     repository_data = []
 
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as zf:
@@ -29,4 +29,5 @@ def parse_repo_zip(zip_bytes: bytes) -> list:
                 logger.error(f"Error processing {filename}: {e}", exc_info=True)
                 continue
 
+    logger.info(f"Parsed {len(repository_data)} markdown files from zip")
     return repository_data
