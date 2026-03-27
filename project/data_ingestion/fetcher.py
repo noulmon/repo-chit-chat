@@ -1,11 +1,14 @@
+import logging
+
 import requests
 
-def fetch_repo_zip(repo_owner, repo_name) -> bytes:
-    prefix = 'https://codeload.github.com'
-    url = f'{prefix}/{repo_owner}/{repo_name}/zip/refs/heads/main'
-    resp = requests.get(url)
-    
-    if resp.status_code != 200:
-        raise Exception(f"Failed to download repository: {resp.status_code}")
-    
+logger = logging.getLogger(__name__)
+
+
+def fetch_repo_zip(repo_owner: str, repo_name: str) -> bytes:
+    url = f"https://codeload.github.com/{repo_owner}/{repo_name}/zip/refs/heads/main"
+    logger.info(f"Fetching repository zip from {url}")
+    resp = requests.get(url, timeout=30)
+    resp.raise_for_status()
+    logger.info(f"Fetched {len(resp.content)} bytes for {repo_owner}/{repo_name}")
     return resp.content
