@@ -1,6 +1,5 @@
 import numpy as np
-from minsearch import VectorSearch, Index
-
+from minsearch import Index, VectorSearch
 
 
 class SearchEngine:
@@ -11,8 +10,7 @@ class SearchEngine:
 
         # build indexes once
         self.index = Index(
-            text_fields=["chunk", "title", "description", "filename"],
-            keyword_fields=[]
+            text_fields=["chunk", "title", "description", "filename"], keyword_fields=[]
         )
         self.index.fit(chunks)
 
@@ -29,14 +27,14 @@ class SearchEngine:
     def hybrid_search(self, query: str) -> list:
         text_results = self.text_search(query)
         vector_results = self.vector_search(query)
-        
+
         seen = set()
         combined_results = []
         for result in text_results + vector_results:
             # use a unique chunk identifier instead of filename
-            key = (result['filename'], result['chunk'])
+            key = (result["filename"], result["chunk"])
             if key not in seen:
                 seen.add(key)
                 combined_results.append(result)
-        
+
         return combined_results
