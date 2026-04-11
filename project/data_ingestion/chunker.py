@@ -90,8 +90,6 @@ class DataChunker:
             doc_copy = doc.copy()
             doc_content = doc_copy.pop("content")
             chunks = self.chunk_type(doc_content, **self.chunk_kwargs)
-            for chunk in chunks:
-                chunk.update(doc_copy)
-            document_chunks.extend(chunks)
+            document_chunks.extend({**doc_copy, **chunk} for chunk in chunks)
         logger.info(f"Generated {len(document_chunks)} chunks from {len(documents)} documents")
         return document_chunks
